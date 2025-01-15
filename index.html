@@ -75,3 +75,48 @@
     </center>
 </body>
 </html>
+
+<script type="text/javascript">
+
+import { initializeApp } from"https://www.gstatic.com/firebasejs/10.7.2/firebase-app.js";
+
+import { getAuth,createUserWithEmailAndPassword } from"https://www.gstatic.com/firebasejs/10.7.2/firebase-auth.js";
+
+const firebaseConfig = {
+ apiKey: "AIzaSyBkZ3nIsehvs34hRtpEbiYpTggq-kGg5HQ",
+ authDomain: "tracker-b3165.firebaseapp.com",
+ projectId: "tracker-b3165",
+ storageBucket: "tracker-b3165.firebasestorage.app",
+ messagingSenderId: "154376473113",
+ appId: "1:154376473113:web:6e4f8d0d22b2a545b0b888",
+ };
+
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+
+//submit
+
+const submit = document.getElementById("submit");
+submit.addEventListener("click", function (event)
+event.preventDefault()
+//imputs
+const email = document.getElementById("email").value;
+const password = document.getElementById("password").value;
+
+createUserWithEmailAndPassword( auth, email, password )
+.then((userCredential) = > {
+//signed up
+
+const user = userCredential.user;
+alert("creating acc")
+
+})
+
+.catch (error) = > {
+const errorCode = error.code;
+const errorMessage = error.message;
+alert(errorMessage)
+
+});
+</script>
