@@ -1,0 +1,127 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Sign Up</h1>
+    <input type="text" id="name" placeholder="Name">
+    <input type="text" id="surname" placeholder="Surname">
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Password">
+    <input type="number" id="cell_number" placeholder="Cell Number">
+    <button id="submit">Sign Up</button>
+    <div id="error-message"></div>
+  </div>
+</body>
+</html>
+
+
+
+<style type="text/css">
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+}
+
+.container {
+  max-width: 300px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+input[type="email"], input[type="password"],input[type="text"],input[type="number"]{
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+}
+
+button[type="button"] {
+  width: 100%;
+  padding: 10px;
+  background-color: #4CAF50;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button[type="button"]:hover {
+  background-color: #3e8e41;
+}
+
+#error-message {
+  color: red;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+</style>
+
+
+
+<script type="module">
+
+import { createClient } from 'https://cdn.skypack.dev/@supabase/supabase-js';
+const supabaseUrl = 'https://vefcftvmjuksycmyrvmi.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZlZmNmdHZtanVrc3ljbXlydm1pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIxMTI4OTgsImV4cCI6MjA1NzY4ODg5OH0.VXcB8J56mK51kIGqBzYPZUh8d1wQ5rR4DlyA22r-vsA';
+const supabase = createClient(supabaseUrl, supabaseKey);
+ 
+submit.addEventListener("click", async function (event) {
+  event.preventDefault();
+  const name = document.getElementById("name").value;
+  const surname = document.getElementById("surname").value;
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  const cellNumber = document.getElementById("cell_number").value;
+
+  alert('Signing up user...');
+
+  const { user, error: signUpError } = await supabase.auth.signUp({ email, password });
+
+  if (signUpError) {
+    alert('Sign up error: ' + signUpError.message);
+  } else {
+    alert('User signed up successfully!');
+
+    // Update user's cell number
+    const { data, error: updateError } = await supabase
+      .from('auth.users')
+      .update({ cell_number: cellNumber })
+      .eq('email', email);
+
+    if (updateError) {
+      alert('Update error: ' + updateError.message);
+    } else {
+      alert('Cell number updated successfully!');
+
+      // Insert user data into mytable
+      const { data, error } = await supabase
+        .from('mytable')
+        .insert([{ 
+          name, 
+          surname, 
+          email, 
+          cell_number: cellNumber 
+        }]);
+
+      if (error) {
+        alert('Insert error: ' + error.message);
+      } else {
+        alert('Data inserted successfully!');
+        alert("Account created successfully!");
+      }
+    }
+  }
+});
+</script>
