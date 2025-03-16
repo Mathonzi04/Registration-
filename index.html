@@ -1,102 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Firebase Authentication</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Sign Up</h1>
-        <input type="email" id="email" placeholder="Email">
-        <input type="password" id="password" placeholder="Password">
-        <button id="submit">Sign Up</button>
-        <div id="error-message"></div>
-    </div>
-
-    <script type="module" src="script.js"></script>
+  <div class="container">
+    <h1>Sign Up</h1>
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Password">
+    <button id="submit">Sign Up</button>
+    <div id="error-message"></div>
+  </div>
+  
 </body>
 </html>
 
+
 <style type="text/css">
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
 }
 
 .container {
-    max-width: 300px;
-    margin: 50px auto;
-    padding: 20px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  max-width: 300px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 input[type="email"], input[type="password"] {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
 }
 
 button[type="button"] {
-    width: 100%;
-    padding: 10px;
-    background-color: #4CAF50;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+  width: 100%;
+  padding: 10px;
+  background-color: #4CAF50;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 button[type="button"]:hover {
-    background-color: #3e8e41;
+  background-color: #3e8e41;
 }
 
 #error-message {
-    color: red;
-    font-size: 14px;
-    margin-top: 10px;
+  color: red;
+  font-size: 14px;
+  margin-top: 10px;
 }
+
 </style>
-<script type="text/javascript">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-analytics.js";
-import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyAh-SliFoka-YRjKEaPB7ZNivuatjDNZnw",
-  authDomain: "vinci-1.firebaseapp.com",
-  projectId: "vinci-1",
-  storageBucket: "vinci-1.firebasestorage.app",
-  messagingSenderId: "822377279049",
-  appId: "1:822377279049:web:38eb0c8e08ed027ff79998"
-};
+<script type="module">
 
+import { createClient } from 'https://cdn.skypack.dev/@supabase/supabase-js';
 
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-const auth = getAuth(app);
+const supabaseUrl = 'https://vefcftvmjuksycmyrvmi.supabase.co';
+const supabaseKey = process.env.SUPABASE_KEY;
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 const submit = document.getElementById("submit");
-submit.addEventListener("click", function (event) {
+
+submit.addEventListener("click", async function (event) {
   event.preventDefault();
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-  createUserWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      const user = userCredential.user;
-      alert("Account created successfully!");
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      document.getElementById("error-message").innerHTML = errorMessage;
-    });
+  const { data, error } = await supabase
+    .from('users')
+    .insert([{ email, password }]);
+
+  if (error) {
+    document.getElementById("error-message").innerHTML = error.message;
+  } else {
+    alert("Account created successfully!");
+  }
 });
+
 </script>
 
+
+    
+    
