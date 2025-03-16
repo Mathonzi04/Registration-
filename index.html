@@ -18,7 +18,6 @@
 </body>
 </html>
 
-
 <style type="text/css">
 body {
   font-family: Arial, sans-serif;
@@ -69,7 +68,7 @@ button[type="button"]:hover {
 import { createClient } from 'https://cdn.skypack.dev/@supabase/supabase-js';
 
 const supabaseUrl = 'https://vefcftvmjuksycmyrvmi.supabase.co';
-const supabaseKey = process.env.SUPABASE_KEY;
+const supabaseKey = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZlZmNmdHZtanVrc3ljbXlydm1pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIxMTI4OTgsImV4cCI6MjA1NzY4ODg5OH0.VXcB8J56mK51kIGqBzYPZUh8d1wQ5rR4DlyA22r-vsA; // Replace with your actual Supabase key
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 const submit = document.getElementById("submit");
@@ -79,18 +78,32 @@ submit.addEventListener("click", async function (event) {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-  const { data, error } = await supabase
-    .from('users')
-    .insert([{ email, password }]);
+  // Sign up the user
+  const { user, error: signUpError } = await supabase.auth.signUp({
+    email,
+    password,
+  });
 
-  if (error) {
-    document.getElementById("error-message").innerHTML = error.message;
+  if (signUpError) {
+    document.getElementById("error-message").innerHTML = signUpError.message;
   } else {
-    alert("Account created successfully!");
+    // Insert additional user data into mytable
+    const { data, error } = await supabase
+      .from('mytable')
+      .insert([{ name: email.split('@')[0], email }]); // Example: using the email prefix as the name
+
+    if (error) {
+      document.getElementById("error-message").innerHTML = error.message;
+    } else {
+      alert("Account created successfully!");
+    }
   }
 });
 
 </script>
+
+
+
 
 
     
