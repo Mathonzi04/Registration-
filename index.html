@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -63,44 +64,45 @@ button[type="button"]:hover {
 
 </style>
 
+
 <script type="module">
-
-import { createClient } from 'https://cdn.skypack.dev/@supabase/supabase-js';
-
-const supabaseUrl = 'https://vefcftvmjuksycmyrvmi.supabase.co';
-const supabaseKey = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZlZmNmdHZtanVrc3ljbXlydm1pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIxMTI4OTgsImV4cCI6MjA1NzY4ODg5OH0.VXcB8J56mK51kIGqBzYPZUh8d1wQ5rR4DlyA22r-vsA; // Replace with your actual Supabase key
-const supabase = createClient(supabaseUrl, supabaseKey);
-
-const submit = document.getElementById("submit");
-
-submit.addEventListener("click", async function (event) {
-  event.preventDefault();
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-
-  // Sign up the user
-  const { user, error: signUpError } = await supabase.auth.signUp({
-    email,
-    password,
-  });
-
-  if (signUpError) {
-    document.getElementById("error-message").innerHTML = signUpError.message;
-  } else {
-    // Insert additional user data into mytable
-    const { data, error } = await supabase
-      .from('mytable')
-      .insert([{ name: email.split('@')[0], email }]); // Example: using the email prefix as the name
-
-    if (error) {
-      document.getElementById("error-message").innerHTML = error.message;
+  import { createClient } from 'https://cdn.skypack.dev/@supabase/supabase-js';
+  
+  const supabaseUrl = 'https://vefcftvmjuksycmyrvmi.supabase.co';
+  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZlZmNmdHZtanVrc3ljbXlydm1pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIxMTI4OTgsImV4cCI6MjA1NzY4ODg5OH0.VXcB8J56mK51kIGqBzYPZUh8d1wQ5rR4DlyA22r-vsA';
+  
+  const supabase = createClient(supabaseUrl, supabaseKey);
+  
+  const submit = document.getElementById("submit");
+  submit.addEventListener("click", async function (event) {
+    event.preventDefault();
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    
+    alert('Signing up user...');
+    
+    const { user, error: signUpError } = await supabase.auth.signUp({ email, password, });
+    
+    if (signUpError) {
+      alert('Sign up error: ' + signUpError.message);
     } else {
-      alert("Account created successfully!");
+      alert('User signed up successfully!');
+      
+      const { data, error } = await supabase
+        .from('mytable')
+        .insert([{ name: email.split('@')[0], email }]);
+      
+      if (error) {
+        alert('Insert error: ' + error.message);
+      } else {
+        alert('Data inserted successfully!');
+        alert("Account created successfully!");
+      }
     }
-  }
-});
-
+  });
 </script>
+
+
 
 
 
