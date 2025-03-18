@@ -8,55 +8,54 @@
   <title>Login</title>
 </head>
 <style type="text/css">
-  *{
-      padding:0;
-      margin:0;
+  * {
+      padding: 0;
+      margin: 0;
   }
-  .container{
-      background-color:#fffff;
-      padding:20px;
-      width:70%;
-      margin-top:100px;
+  .container {
+      background-color: #fffff;
+      padding: 20px;
+      width: 70%;
+      margin-top: 100px;
       box-shadow: 0 3px 2px 0 rgba(235, 231, 231, 0.555), 0 1px 11px 0 rgba(0, 0, 0, 0.10);
   }
-  h3{
-      padding:20px;
+  h3 {
+      padding: 20px;
   }
-  label{
-      padding:10px;
-      display:block;
+  label {
+      padding: 10px;
+      display: block;
   }
-  input[type="email"],[type="password"] {
+  input[type="email"], [type="password"] {
       width: 65%;
       height: 20px;
       padding: 7px;
       font-size: 16px;
       border: 1px solid #ccc;
       border-radius: 3px;
-      margin-bottom:20px;
+      margin-bottom: 20px;
   }
-  button[id=submit]{
-      font-size:14px;
-      width:150px;
-      padding:10px;
-      border:none;
-      color:white;
-      border-radius:7px;
-      background-color:#34C759;
-      margin-top:0px;
+  button[id=submit] {
+      font-size: 14px;
+      width: 150px;
+      padding: 10px;
+      border: none;
+      color: white;
+      border-radius: 7px;
+      background-color: #34C759;
+      margin-top: 0px;
   }
-  button:hover{
-  background-color:grey;
+  button:hover {
+      background-color: grey;
   }
-  
-  p[id="resetPass"]{
-  padding:20px;
-  margin-top:-20px;
-  color:grey;
+  p[id="resetPass"] {
+      padding: 20px;
+      margin-top: -20px;
+      color: grey;
   }
-  a{
-      text-decoration:none;
-      color:grey;
+  a {
+      text-decoration: none;
+      color: grey;
   }
 </style>
 <body>
@@ -72,48 +71,47 @@
           <input type="email" id="email" placeholder="Enter Your Email" required>
           <label><b>Password</b>:</label>
           <input type="password" id="password" placeholder="Enter Your Password" required>
-          <p id="resetPass" >Forgot Password??</p>
+          <p id="resetPass">Forgot Password??</p>
           &nbsp;&nbsp;
-          <button id="submit" >Login</button>
+          <button id="submit">Login</button>
         </div>
         &nbsp;
-        <p>Don't have Account??<a href="https://mathonzi04.github.io/Registration-/signup2.html"><b> Register</b></a></p>
+        <p>Don't have an Account??<a href="https://mathonzi04.github.io/Registration-/signup2.html"><b> Register</b></a></p>
       </div>
     </div>
   </center>
 </body>
 </html>
-<script type="text/javascript">
+<script type="module">
   import { createClient } from 'https://cdn.skypack.dev/@supabase/supabase-js';
   const supabaseUrl = 'https://vefcftvmjuksycmyrvmi.supabase.co';
-  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZlZmNmdHZtanVrc3ljbXlydm1pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIxMTI4OTgsImV4cCI6MjA1NzY4ODg5OH0.VXcB8J56mK51kIGqBzYPZUh8d1wQ5rR4DlyA22r-vsA';
+  const supabaseKey = 'YOUR_PUBLIC_ANON_KEY'; // Replace with your actual Public Anon Key
   const supabase = createClient(supabaseUrl, supabaseKey);
 
-document.getElementById("submit").addEventListener("click", async function(event) {
-  event.preventDefault();
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
+  document.getElementById("submit").addEventListener("click", async function(event) {
+    event.preventDefault();
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
 
-  if (!email || !password) {
-    alert("Please enter both email and password");
-    return;
-  }
-
-  try {
-    const { user, error } = await supabase.auth.signInWithPassword({
-      email: email,
-      password: password,
-    });
-
-    if (error) {
-      alert('Login error: ' + error.message);
-    } else {
-      alert('Logged in successfully!');
-      window.location.href = 'profile.html';
+    if (!email || !password) {
+      alert("Please enter both email and password");
+      return;
     }
-  } catch (error) {
-    alert('Login error: ' + error.message);
-  }
-});
 
+    try {
+      const { user, error } = await supabase.auth.signInWithPassword({
+        email: email,
+        password: password,
+      });
+
+      if (error) {
+        alert('Login error: ' + error.message);
+      } else {
+        alert('Logged in successfully!');
+        window.location.href = 'profile.html'; // Redirect to profile page
+      }
+    } catch (error) {
+      alert('Login error: ' + error.message);
+    }
+  });
 </script>
