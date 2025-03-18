@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -84,37 +85,35 @@
 </html>
 <script type="text/javascript">
   import { createClient } from 'https://cdn.skypack.dev/@supabase/supabase-js';
-  const supabaseUrl = 'https://your-supabase-instance.supabase.co';
+  const supabaseUrl = 'https://vefcftvmjuksycmyrvmi.supabase.co';
   const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZlZmNmdHZtanVrc3ljbXlydm1pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIxMTI4OTgsImV4cCI6MjA1NzY4ODg5OH0.VXcB8J56mK51kIGqBzYPZUh8d1wQ5rR4DlyA22r-vsA';
   const supabase = createClient(supabaseUrl, supabaseKey);
 
-  document.getElementById("submit").addEventListener("click", async function(event) {
-    event.preventDefault();
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-    if (email.indexOf("@") === -1 || email.indexOf(".com") === -1) {
-      alert("Enter a valid email");
-      return;
-    }
-    if (password === "") {
-      alert("Please enter your password");
-      return;
-    }
+document.getElementById("submit").addEventListener("click", async function(event) {
+  event.preventDefault();
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
 
-    try {
-      const { user, error } = await supabase.auth.signInWithPassword({
-        email: email,
-        password: password,
-      });
-      if (error) {
-        alert('Login error: ' + error.message);
-      } else {
-        alert('Logged in successfully!');
-        // Redirect to dashboard or home page
-        window.location.href = 'profile.html';
-      }
-    } catch (error) {
+  if (!email || !password) {
+    alert("Please enter both email and password");
+    return;
+  }
+
+  try {
+    const { user, error } = await supabase.auth.signInWithPassword({
+      email: email,
+      password: password,
+    });
+
+    if (error) {
       alert('Login error: ' + error.message);
+    } else {
+      alert('Logged in successfully!');
+      window.location.href = 'profile.html';
     }
-  });
+  } catch (error) {
+    alert('Login error: ' + error.message);
+  }
+});
+
 </script>
