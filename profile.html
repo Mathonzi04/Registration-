@@ -85,8 +85,9 @@
   <div class="address"><h4>Name and Surname:</h4><p id="name-surname"></p> </div>
   <hr>
 
-    <script type="text/javascript">
- 
+  
+<script type="text/javascript">
+  // Include the Supabase JavaScript library
   const supabaseUrl = 'https://vefcftvmjuksycmyrvmi.supabase.co';
   const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZlZmNmdHZtanVrc3ljbXlydm1pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIxMTI4OTgsImV4cCI6MjA1NzY4ODg5OH0.VXcB8J56mK51kIGqBzYPZUh8d1wQ5rR4DlyA22r-vsA';
 
@@ -94,7 +95,7 @@
 
   // Verify user authentication
   if (supabase.auth.user()) {
-    console.log('User is authenticated');
+    alert('User is authenticated');
 
     // Fetch data from Supabase
     supabase
@@ -103,36 +104,39 @@
       .eq('id', supabase.auth.user().id)
       .then(({ data, error }) => {
         if (error) {
-          console.error(error);
           alert('Error: ' + error.message);
         } else {
           const userData = data[0];
-          document.getElementById('username').innerHTML = `${userData.name} ${userData.surname}`;
-          document.getElementById('email').innerHTML = userData.email;
-          document.getElementById('cell-number').innerHTML = userData.cell_number;
-          document.getElementById('name-surname').innerHTML = `${userData.name} ${userData.surname}`;
+          alert('Data: ' + JSON.stringify(userData));
+
+          // Display user data
+          alert('Username: ' + userData.name + ' ' + userData.surname);
+          alert('Email: ' + userData.email);
+          alert('Cell Number: ' + userData.cell_number);
+          alert('Name Surname: ' + userData.name + ' ' + userData.surname);
 
           // Check if vehicle name is empty
           if (!userData.Vehicle_name) {
-            document.getElementById('Vehicle-name').innerHTML = 'No car name added. Please contact the admin to add your car name.';
+            alert('No car name added. Please contact the admin to add your car name.');
           } else {
-            document.getElementById('Vehicle-name').innerHTML = userData.Vehicle_name;
+            alert('Vehicle Name: ' + userData.Vehicle_name);
           }
         }
       });
   } else {
-    console.log('User is not authenticated');
+    alert('User is not authenticated');
     alert('You must be logged in to view your profile.');
   }
 
   // Listen for authentication state changes
   supabase.auth.onAuthStateChange((event, session) => {
     if (event === 'SIGNED_IN') {
-      console.log('User is signed in');
+      alert('User is signed in');
       // Fetch data here
     } else if (event === 'SIGNED_OUT') {
-      console.log('User is signed out');
+      alert('User is signed out');
       // Handle signed-out user
     }
   });
 </script>
+
