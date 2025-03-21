@@ -1,0 +1,117 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile</title>
+  <style type="text/css">
+    
+    * {
+         padding: 0;
+         margin: 0;
+     }
+     
+     .header {
+         background-color: white;
+         top: 0px;
+         padding: 20px;
+         width: 100%;
+         position: fixed;
+         margin-top: 0px;
+           border-bottom:1.5px solid #ccc;
+           }
+     
+     h3 {
+         text-align: center;
+     }
+     
+    p[id="home"]{
+    position:absolute;
+       margin-top:-300px;
+       color:white;
+       margin-left:10px;
+    }  
+     a{
+     text-decoration:none;
+     font-size:20px;
+     color:white;
+     }
+     .profileAll {
+         background-color: #DADADA;
+         width: 94.6%;
+         height: 32vh; 
+         border-radius:10px 10px 0px 0px;
+         padding:10px;
+         margin-top:70px; 
+     
+     }
+     
+     .profile {
+         width: 150px;
+         height: 150px;
+         background-color: white;
+         border-radius: 150px;
+         margin-left:29%;
+         margin-top:50px;
+     }
+      
+     
+        .names{
+        padding:10px;
+        background-color:white;
+        }    
+        .car p,.address p,.email p,.tel p{
+        color:grey;
+        display:flex;
+        padding:10px;
+        }
+    
+  </style>
+</head>
+<body>
+  <div class="header"><h3>Profile</h3></div>
+  <div class="profileAll">
+    <div class="profile">
+      <img src=".noprofile.jpg" style="height:120px; width:120px; margin-top:15px; margin-left:15px; border-radius:25px;">
+    </div>
+  </div>
+  <div class="names"><h3 align="center" id="username"></h3></div>
+  <div class="car"><h4>Vehicle:</h4><p id="Vehicle-name"></p> </div>
+  <p id="home"><a href="home.html" ><b>< Home</b></a></p>
+  <h3>Personal Info</h3>
+  <div class="email"><h4>Email:</h4><p id="email"></p> </div>
+  <div class="tel"><h4>Cell Number:</h4><p id="cell-number"></p> </div>
+  <div class="address"><h4>Name and Surname:</h4><p id="name-surname"></p> </div>
+  <hr>
+  
+  <script type="text/javascript">
+  
+  const supabaseUrl = 'https://vefcftvmjuksycmyrvmi.supabase.co';
+  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZlZmNmdHZtanVrc3ljbXlydm1pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIxMTI4OTgsImV4cCI6MjA1NzY4ODg5OH0.VXcB8J56mK51kIGqBzYPZUh8d1wQ5rR4DlyA22r-vsA';
+  const supabase = createClient(supabaseUrl, supabaseKey);
+  
+  .from('users')
+  .select('name, surname, email, cell_number, Vehicle_name')
+  .eq('id', supabase.auth.user().id)
+  .then(({ data, error }) => {
+  if (error) {
+  console.error(error);
+  } else {
+  const userData = data[0];
+  document.getElementById('username').innerHTML = `${userData.name} ${userData.surname}`;
+  document.getElementById('email').innerHTML = userData.email;
+  document.getElementById('cell-number').innerHTML = userData.cell_number;
+  document.getElementById('name-surname').innerHTML = `${userData.name} ${userData.surname}`;
+  
+  // Check if vehicle name is empty
+  if (!userData.vehicle_name) {
+  document.getElementById('Vehicle-name').innerHTML = 'No car name added. Please contact the admin to add your car name.';
+  } else {
+  document.getElementById('Vehicle-name').innerHTML = userData.Vehicle_name;
+  }
+  }
+  });
+  
+  
+  </script>
