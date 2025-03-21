@@ -85,7 +85,7 @@
 <script type="module">
   import { createClient } from 'https://cdn.skypack.dev/@supabase/supabase-js';
   const supabaseUrl = 'https://vefcftvmjuksycmyrvmi.supabase.co';
-  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZlZmNmdHZtanVrc3ljbXlydm1pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIxMTI4OTgsImV4cCI6MjA1NzY4ODg5OH0.VXcB8J56mK51kIGqBzYPZUh8d1wQ5rR4DlyA22r-vsA';
+  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZlZmNmdHZtanVrc3ljbXlydm1pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIxMTI4OTgsImV4cCI6MjA1NzY8ODg5OH0.VXcB8J56mK51kIGqBzYPZUh8d1wQ5rR4DlyA22r-vsA';
   const supabase = createClient(supabaseUrl, supabaseKey);
 
   document.getElementById("submit").addEventListener("click", async function(event) {
@@ -108,7 +108,7 @@
         alert('Login error: ' + error.message);
       } else {
         alert('Logged in successfully!');
-        window.location.href = 'profile.html'; // Redirect to profile page
+        window.location.href = `profile.html?user_id=${user.user.id}`; // Pass user ID as URL parameter
       }
     } catch (error) {
       alert('Login error: ' + error.message);
