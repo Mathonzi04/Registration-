@@ -84,34 +84,32 @@
   <div class="tel"><h4>Cell Number:</h4><p id="cell-number"></p> </div>
   <div class="address"><h4>Name and Surname:</h4><p id="name-surname"></p> </div>
   <hr>
-  
-  <script type="text/javascript">
-  
+  <script>
   const supabaseUrl = 'https://vefcftvmjuksycmyrvmi.supabase.co';
   const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZlZmNmdHZtanVrc3ljbXlydm1pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIxMTI4OTgsImV4cCI6MjA1NzY4ODg5OH0.VXcB8J56mK51kIGqBzYPZUh8d1wQ5rR4DlyA22r-vsA';
+
   const supabase = createClient(supabaseUrl, supabaseKey);
-  
-  .from('users')
-  .select('name, surname, email, cell_number, Vehicle_name')
-  .eq('id', supabase.auth.user().id)
-  .then(({ data, error }) => {
-  if (error) {
-  console.error(error);
-  } else {
-  const userData = data[0];
-  document.getElementById('username').innerHTML = `${userData.name} ${userData.surname}`;
-  document.getElementById('email').innerHTML = userData.email;
-  document.getElementById('cell-number').innerHTML = userData.cell_number;
-  document.getElementById('name-surname').innerHTML = `${userData.name} ${userData.surname}`;
-  
-  // Check if vehicle name is empty
-  if (!userData.vehicle_name) {
-  document.getElementById('Vehicle-name').innerHTML = 'No car name added. Please contact the admin to add your car name.';
-  } else {
-  document.getElementById('Vehicle-name').innerHTML = userData.Vehicle_name;
-  }
-  }
-  });
-  
-  
-  </script>
+
+  supabase
+    .from('mytable')
+    .select('name, surname, email, cell_number, Vehicle_name')
+    .eq('id', supabase.auth.user().id)
+    .then(({ data, error }) => {
+      if (error) {
+        console.error(error);
+      } else {
+        const userData = data[0];
+        document.getElementById('username').innerHTML = `${userData.name} ${userData.surname}`;
+        document.getElementById('email').innerHTML = userData.email;
+        document.getElementById('cell-number').innerHTML = userData.cell_number;
+        document.getElementById('name-surname').innerHTML = `${userData.name} ${userData.surname}`;
+
+        // Check if vehicle name is empty
+        if (!userData.Vehicle_name) {
+          document.getElementById('Vehicle-name').innerHTML = 'No car name added. Please contact the admin to add your car name.';
+        } else {
+          document.getElementById('Vehicle-name').innerHTML = userData.Vehicle_name;
+        }
+      }
+    });
+</script>
