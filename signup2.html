@@ -103,11 +103,15 @@ form.addEventListener('submit', async function(event) {
   const password = document.getElementById('password').value;
   const cellNumber = document.getElementById('cell_number').value;
 
+  alert('Submitting form...');
+
   try {
     const { user, error: signUpError } = await supabase.auth.signUp({
       email,
       password,
     });
+
+    alert('Sign up response: ' + JSON.stringify(user) + ', Error: ' + signUpError);
 
     if (signUpError) {
       alert('Sign up error: ' + signUpError.message);
@@ -115,7 +119,7 @@ form.addEventListener('submit', async function(event) {
     }
 
     const uid = supabase.auth.user().id;
-    console.log('UID:', uid);
+    alert('UID: ' + uid);
 
     try {
       const { data, error: insertError } = await supabase
@@ -126,14 +130,16 @@ form.addEventListener('submit', async function(event) {
             surname,
             email,
             cell_number: cellNumber,
-            user id: uid, // Insert the UID into the user id column
+            user_id: uid,
           },
         ]);
+
+      alert('Insert response: ' + JSON.stringify(data) + ', Error: ' + insertError);
 
       if (insertError) {
         alert('Insert error: ' + insertError.message);
       } else {
-        console.log('Data inserted:', data);
+        alert('Data inserted: ' + JSON.stringify(data));
         alert('Account created successfully!');
         window.location.href = 'welcome_page.html';
       }
@@ -144,6 +150,21 @@ form.addEventListener('submit', async function(event) {
     alert('An unexpected error occurred: ' + error.message);
   }
 });
-  </script>
+```
+
+This will display alerts at each step of the process, helping you identify where things might be going wrong.
+      } else {
+        alert('Data inserted: ' + JSON.stringify(data));
+        alert('Account created successfully!');
+        window.location.href = 'welcome_page.html';
+      }
+    } catch (insertError) {
+      alert('Insert error: ' + insertError.message);
+    }
+  } catch (error) {
+    alert('An unexpected error occurred: ' + error.message);
+  }
+});
+ </script>
 </body>
 </html>
