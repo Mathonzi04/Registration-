@@ -130,7 +130,7 @@ form.addEventListener('submit', async function(event) {
             surname,
             email,
             cell_number: cellNumber,
-            user_id: uid,
+            user id: uid,
           },
         ]);
 
@@ -150,21 +150,7 @@ form.addEventListener('submit', async function(event) {
     alert('An unexpected error occurred: ' + error.message);
   }
 });
-```
 
-This will display alerts at each step of the process, helping you identify where things might be going wrong.
-      } else {
-        alert('Data inserted: ' + JSON.stringify(data));
-        alert('Account created successfully!');
-        window.location.href = 'welcome_page.html';
-      }
-    } catch (insertError) {
-      alert('Insert error: ' + insertError.message);
-    }
-  } catch (error) {
-    alert('An unexpected error occurred: ' + error.message);
-  }
-});
  </script>
 </body>
 </html>
