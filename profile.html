@@ -5,118 +5,138 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Profile</title>
-  <style type="text/css">
-    
-    * {
-         padding: 0;
-         margin: 0;
-     }
-     
-     .header {
-         background-color: white;
-         top: 0px;
-         padding: 20px;
-         width: 100%;
-         position: fixed;
-         margin-top: 0px;
-           border-bottom:1.5px solid #ccc;
-           }
-     
-     h3 {
-         text-align: center;
-     }
-     
-    p[id="home"]{
-    position:absolute;
-       margin-top:-300px;
-       color:white;
-       margin-left:10px;
-    }  
-     a{
-     text-decoration:none;
-     font-size:20px;
-     color:white;
-     }
-     .profileAll {
-         background-color: #DADADA;
-         width: 94.6%;
-         height: 32vh; 
-         border-radius:10px 10px 0px 0px;
-         padding:10px;
-         margin-top:70px; 
-     
-     }
-     
-     .profile {
-         width: 150px;
-         height: 150px;
-         background-color: white;
-         border-radius: 150px;
-         margin-left:29%;
-         margin-top:50px;
-     }
-      
-     
-        .names{
-        padding:10px;
-        background-color:white;
-        }    
-        .car p,.address p,.email p,.tel p{
-        color:grey;
-        display:flex;
-        padding:10px;
-        }
-    
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+
+    .header {
+      background-color: #fff;
+      padding: 20px;
+      text-align: center;
+      border-bottom: 1px solid #ddd;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .profile-container {
+      background-color: #e9e9e9;
+      padding: 20px;
+      margin-top: 70px;
+    }
+
+    .profile-image {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background-color: #fff;
+      margin: 20px auto;
+      overflow: hidden;
+    }
+
+    .profile-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .user-details {
+      background-color: #fff;
+      padding: 20px;
+      margin-top: 20px;
+    }
+
+    .user-details h3 {
+      text-align: center;
+    }
+
+    .user-details p {
+      color: #777;
+      padding: 10px;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .home-link {
+      margin-top: 20px;
+      text-align: left;
+    }
+
+    .home-link a {
+      text-decoration: none;
+      font-size: 16px;
+      color: #007bff;
+    }
   </style>
 </head>
 <body>
-  <div class="header"><h3>Profile</h3></div>
-  <div class="profileAll">
-    <div class="profile">
-      <img src="noprofile.jpg" style="height:120px; width:120px; margin-top:15px; margin-left:15px; border-radius:25px;">
+  <div class="header">
+    <h3>Profile</h3>
+  </div>
+
+  <div class="profile-container">
+    <div class="profile-image">
+      <img src="noprofile.jpg" alt="Profile Picture">
+    </div>
+    <div class="user-details">
+      <h3 id="username"></h3>
+      <p><span>Vehicle:</span> <span id="Vehicle-name"></span></p>
+      <p><span>Email:</span> <span id="email"></span></p>
+      <p><span>Cell Number:</span> <span id="cell-number"></span></p>
+      <p><span>Name and Surname:</span> <span id="name-surname"></span></p>
+    </div>
+    <div class="home-link">
+      <a href="home.html"><b>&lt; Home</b></a>
     </div>
   </div>
-  <div class="names"><h3 align="center" id="username"></h3></div>
-  <div class="car"><h4>Vehicle:</h4><p id="Vehicle-name"></p> </div>
-  <p id="home"><a href="home.html" ><b>< Home</b></a></p>
-  <h3>Personal Info</h3>
-  <div class="email"><h4>Email:</h4><p id="email"></p> </div>
-  <div class="tel"><h4>Cell Number:</h4><p id="cell-number"></p> </div>
-  <div class="address"><h4>Name and Surname:</h4><p id="name-surname"></p> </div>
-  <hr>
 
-  
-<script type="text/javascript">
+  <script type="module">
+    import { createClient } from 'https://cdn.skypack.dev/@supabase/supabase-js';
+
     const supabaseUrl = 'https://vefcftvmjuksycmyrvmi.supabase.co';
-  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZlZmNmdHZtanVrc3ljbXlydm1pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIxMTI4OTgsImV4cCI6MjA1NzY4ODg5OH0.VXcB8J56mK51kIGqBzYPZUh8d1wQ5rR4DlyA22r-vsA';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZlZmNmdHZtanVrc3ljbXlydm1pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIxMTI4OTgsImV4cCI6MjA1NzY4ODg5OH0.VXcB8J56mK51kIGqBzYPZUh8d1wQ5rR4DlyA22r-vsA';
 
-  const supabase = createClient(supabaseUrl, supabaseKey);
+    const supabase = createClient(supabaseUrl, supabaseKey);
 
-  supabase
-  .from('mytable')
-  .select('name, surname, email, cell_number, Vehicle_name')
-  .eq('ID', supabase.auth.user().id) // Use the correct column name 'ID' and the UID from auth
-  .then(({ data, error }) => {
-    if (error) {
-      alert('Error: ' + error.message);
-    } else {
-      const userData = data[0];
-      alert('Data: ' + JSON.stringify(userData));
+    async function fetchUserProfile() {
+      try {
+        const { data, error } = await supabase
+          .from('mytable')
+          .select('name, surname, email, cell_number, Vehicle_name')
+          .eq('ID', supabase.auth.user().id);
 
-      // Display user data on profile HTML
-      document.getElementById('username').innerHTML = `${userData.name} ${userData.surname}`;
-      document.getElementById('email').innerHTML = userData.email;
-      document.getElementById('cell-number').innerHTML = userData.cell_number;
-      document.getElementById('name-surname').innerHTML = `${userData.name} ${userData.surname}`;
+        if (error) {
+          alert('Error: ' + error.message);
+          return;
+        }
 
-      // Check if vehicle name is empty
-      if (!userData.Vehicle_name) {
-        document.getElementById('Vehicle-name').innerHTML = 'No car name added. Please contact the admin to add your car name.';
-      } else {
-        document.getElementById('Vehicle-name').innerHTML = userData.Vehicle_name;
+        if (data && data.length > 0) {
+          const userData = data[0];
+
+          document.getElementById('username').innerHTML = `${userData.name} ${userData.surname}`;
+          document.getElementById('email').innerHTML = userData.email;
+          document.getElementById('cell-number').innerHTML = userData.cell_number;
+          document.getElementById('name-surname').innerHTML = `${userData.name} ${userData.surname}`;
+
+          if (!userData.Vehicle_name) {
+            document.getElementById('Vehicle-name').innerHTML = 'No car name added. Please contact the admin to add your car name.';
+          } else {
+            document.getElementById('Vehicle-name').innerHTML = userData.Vehicle_name;
+          }
+        } else {
+          alert('No user data found.');
+        }
+      } catch (error) {
+        alert('An unexpected error occurred: ' + error.message);
       }
     }
-  });
 
-</script>
-
+    fetchUserProfile();
+  </script>
+</body>
+</html>
