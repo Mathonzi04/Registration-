@@ -96,7 +96,8 @@
   </div>
 
   <script type="module">
-    import { createClient } from 'https://cdn.skypack.dev/@supabase/supabase-js';
+    
+import { createClient } from 'https://cdn.skypack.dev/@supabase/supabase-js';
 
 const supabaseUrl = 'https://vefcftvmjuksycmyrvmi.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZlZmNmdHZtanVrc3ljbXlydm1pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIxMTI4OTgsImV4cCI6MjA1NzY4ODg5OH0.VXcB8J56mK51kIGqBzYPZUh8d1wQ5rR4DlyA22r-vsA';
@@ -104,39 +105,48 @@ const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 async function fetchUserProfile() {
-  try {
-    const { data, error } = await supabase
-      .from('mytable')
-      .select('name, surname, email, cell_number, Vehicle_name')
-      .eq('ID', supabase.auth.user().id); // Corrected line
+  if (supabase.auth.user()) {
+    try {
+      const { data, error } = await supabase
+        .from('mytable')
+        .select('name, surname, email, cell_number, Vehicle_name')
+        .eq('UID', supabase.auth.user().id);
 
-    if (error) {
-      alert('Error: ' + error.message);
-      return;
-    }
-
-    if (data && data.length > 0) {
-      const userData = data[0];
-
-      document.getElementById('username').innerHTML = `${userData.name} ${userData.surname}`;
-      document.getElementById('email').innerHTML = userData.email;
-      document.getElementById('cell-number').innerHTML = userData.cell_number;
-      document.getElementById('name-surname').innerHTML = `${userData.name} ${userData.surname}`;
-
-      if (!userData.Vehicle_name) {
-        document.getElementById('Vehicle-name').innerHTML = 'No car name added. Please contact the admin to add your car name.';
-      } else {
-        document.getElementById('Vehicle-name').innerHTML = userData.Vehicle_name;
+      if (error) {
+        alert('Error: ' + error.message);
+        return;
       }
-    } else {
-      alert('No user data found.');
+
+      if (data && data.length > 0) {
+        const userData = data[0];
+        document.getElementById('username').innerHTML = `${userData.name} ${userData.surname}`;
+        document.getElementById('email').innerHTML = userData.email;
+        document.getElementById('cell-number').innerHTML = userData.cell_number;
+        document.getElementById('name-surname').innerHTML = `${userData.name} ${userData.surname}`;
+
+        if (!userData.Vehicle_name) {
+          document.getElementById('Vehicle-name').innerHTML = 'No car name added. Please contact the admin to add your car name.';
+        } else {
+          document.getElementById('Vehicle-name').innerHTML = userData.Vehicle_name;
+        }
+      } else {
+        alert('No user data found.');
+      }
+    } catch (error) {
+      alert('An unexpected error occurred: ' + error.message);
     }
-  } catch (error) {
-    alert('An unexpected error occurred: ' + error.message);
+  } else {
+    alert('You must be logged in to view your profile.');
   }
 }
 
 fetchUserProfile();
+
+supabase.auth.onAuthStateChange((event, session) => {
+  if (event === 'SIGNED_IN') {
+    fetchUserProfile();
+  }
+});
   </script>
 </body>
 </html>
