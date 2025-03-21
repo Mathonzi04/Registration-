@@ -94,55 +94,55 @@
     </div>
   </div>
 
-  <script type="module">
-    import { createClient } from 'https://cdn.skypack.dev/@supabase/supabase-js';
+      <script type="module">
+      import { createClient } from 'https://cdn.skypack.dev/@supabase/supabase-js';
+      const supabaseUrl = 'https://vefcftvmjuksycmyrvmi.supabase.co';
+      const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZlZmNmdHZtanVrc3ljbXlydm1pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIxMTI4OTgsImV4cCI6MjA1NzY8ODg5OH0.VXcB8J56mK51kIGqBzYPZUh8d1wQ5rR4DlyA22r-vsA';
+      const supabase = createClient(supabaseUrl, supabaseKey);
 
-    const supabaseUrl = 'https://vefcftvmjuksycmyrvmi.supabase.co';
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZlZmNmdHZtanVrc3ljbXlydm1pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIxMTI4OTgsImV4cCI6MjA1NzY8ODg5OH0.VXcB8J56mK51kIGqBzYPZUh8d1wQ5rR4DlyA22r-vsA';
+      const urlParams = new URLSearchParams(window.location.search);
+      const userId = urlParams.get('user_id');
 
-    const supabase = createClient(supabaseUrl, supabaseKey);
-
-    async function fetchUserProfile() {
-      try {
-        const user = supabase.auth.user();
-        if (!user) {
-          alert('You must be logged in to view your profile.');
-          return;
-        }
-
-        const { data, error } = await supabase
-          .from('mytable')
-          .select('name, surname, email, cell_number, Vehicle_name')
-          .eq('user_id', user.id); // Use user_id here
-
-        if (error) {
-          alert('Error: ' + error.message);
-          return;
-        }
-
-        if (data && data.length > 0) {
-          const userData = data[0];
-
-          document.getElementById('username').innerHTML = `${userData.name} ${userData.surname}`;
-          document.getElementById('email').innerHTML = userData.email;
-          document.getElementById('cell-number').innerHTML = userData.cell_number;
-          document.getElementById('name-surname').innerHTML = `${userData.name} ${userData.surname}`;
-
-          if (!userData.Vehicle_name) {
-            document.getElementById('Vehicle-name').innerHTML = 'No car name added. Please contact the admin to add your car name.';
-          } else {
-            document.getElementById('Vehicle-name').innerHTML = userData.Vehicle_name;
-          }
-        } else {
-          alert('No user data found.');
-        }
-      } catch (error) {
-        alert('An unexpected error occurred: ' + error.message);
+      if (userId) {
+        // User ID retrieved successfully
+        alert(`User ID from URL: ${userId}`); // Debugging alert
+        fetchUserProfile(userId); // Fetch user data using the ID
+      } else {
+        alert('User ID not found in URL.');
       }
-    }
 
-    fetchUserProfile();
-  </script>
+      async function fetchUserProfile(userId) {
+        try {
+          const { data, error } = await supabase
+            .from('mytable')
+            .select('name, surname, email, cell_number, Vehicle_name')
+            .eq('user id', userId); // Use the retrieved userId
+          if (error) {
+            alert('Error: ' + error.message);
+            return;
+          }
+
+          if (data && data.length > 0) {
+            const userData = data[0];
+
+            document.getElementById('username').innerHTML = `${userData.name} ${userData.surname}`;
+            document.getElementById('email').innerHTML = userData.email;
+            document.getElementById('cell-number').innerHTML = userData.cell_number;
+            document.getElementById('name-surname').innerHTML = `${userData.name} ${userData.surname}`;
+
+            if (!userData.Vehicle_name) {
+              document.getElementById('Vehicle-name').innerHTML = 'No car name added. Please contact the admin to add your car name.';
+            } else {
+              document.getElementById('Vehicle-name').innerHTML = userData.Vehicle_name;
+            }
+          } else {
+            alert('No user data found.');
+          }
+        } catch (error) {
+          alert('An unexpected error occurred: ' + error.message);
+        }
+      }
+    </script>
 </body>
 </html>
 
