@@ -105,12 +105,17 @@ const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 async function fetchUserProfile() {
+  console.log('Fetching user profile...');
   if (supabase.auth.user()) {
+    console.log('User is authenticated');
     try {
       const { data, error } = await supabase
         .from('mytable')
         .select('name, surname, email, cell_number, Vehicle_name')
         .eq('UID', supabase.auth.user().id);
+
+      console.log('Data:', data);
+      console.log('Error:', error);
 
       if (error) {
         alert('Error: ' + error.message);
@@ -119,6 +124,7 @@ async function fetchUserProfile() {
 
       if (data && data.length > 0) {
         const userData = data[0];
+        console.log('User data:', userData);
         document.getElementById('username').innerHTML = `${userData.name} ${userData.surname}`;
         document.getElementById('email').innerHTML = userData.email;
         document.getElementById('cell-number').innerHTML = userData.cell_number;
@@ -139,14 +145,6 @@ async function fetchUserProfile() {
     alert('You must be logged in to view your profile.');
   }
 }
-
-fetchUserProfile();
-
-supabase.auth.onAuthStateChange((event, session) => {
-  if (event === 'SIGNED_IN') {
-    fetchUserProfile();
-  }
-});
   </script>
 </body>
 </html>
