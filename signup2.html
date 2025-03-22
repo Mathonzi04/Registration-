@@ -44,32 +44,34 @@
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZlZmNmdHZtanVrc3ljbXlydm1pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIxMTI4OTgsImV4cCI6MjA1NzY4ODg5OH0.VXcB8J56mK51kIGqBzYPZUh8d1wQ5rR4DlyA22r-vsA'; 
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    const form = document.getElementById('signupForm');
-    form.addEventListener("submit", async function (event) {
-      event.preventDefault();
-      const name = document.getElementById("name").value;
-      const surname = document.getElementById("surname").value;
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-      const cellNumber = document.getElementById("cell_number").value;
+    
+form.addEventListener("submit", async function (event) {
+  event.preventDefault();
+  const name = document.getElementById("name").value;
+  const surname = document.getElementById("surname").value;
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  const cellNumber = document.getElementById("cell_number").value;
 
-      alert('Signing up user...');
+  alert('Signing up user...');
 
-      const { user, error: signUpError } = await supabase.auth.signUp({
-        email,
-        password,
-      });
+  try {
+    const { user, error: signUpError } = await supabase.auth.signUp({
+      email,
+      password,
+    });
 
-      if (signUpError) {
-        alert('Sign up error: ' + signUpError.message);
-        return;
-      }
+    if (signUpError) {
+      alert('Sign up error: ' + signUpError.message);
+      return;
+    }
 
-      alert('User signed up successfully!');
+    alert('User signed up successfully!');
 
-      const userId = user.id; // Get the user ID
-      alert('User ID: ' + userId);
+    const userId = user.id; // Get the user ID
+    alert('User ID: ' + userId);
 
+    try {
       const { data, error } = await supabase
         .from('mytable')
         .insert([{
@@ -87,7 +89,13 @@
         alert("Account created successfully!");
         window.location.href = 'welcome_page.html';
       }
-    });
+    } catch (error) {
+      alert('Insert error: ' + error.message);
+    }
+  } catch (error) {
+    alert('An unexpected error occurred: ' + error.message);
+  }
+});
   </script>
 
 
