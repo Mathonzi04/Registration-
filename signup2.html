@@ -1,79 +1,27 @@
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sign Up</title>
+  <title>Register</title>
   <style type="text/css">
-    * {
-      padding: 0;
-      margin: 0;
-    }
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    .container {
-      background-color: #fff;
-      padding: 20px;
-      width: 70%;
-      max-width: 400px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-    h2 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    label {
-      display: block;
-      margin-bottom: 5px;
-    }
-    input[type="email"],
-    input[type="password"],
-    input[type="text"],
-    input[type="number"] {
-      width: calc(100% - 22px);
-      padding: 10px;
-      margin-bottom: 15px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      box-sizing: border-box;
-    }
-    button {
-      width: 100%;
-      padding: 10px;
-      background-color: #34C759;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #28a745;
-    }
-    p {
-      text-align: center;
-      margin-top: 15px;
-    }
-    a {
-      color: #007bff;
-      text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
+    * { padding: 0; margin: 0; }
+    body { font-family: Arial, sans-serif; background-color: #f4f4f4; display: flex; justify-content: center; align-items: center; height: 100vh; }
+    .container { background-color: #fff; padding: 20px; width: 70%; max-width: 400px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+    h2 { text-align: center; margin-bottom: 20px; }
+    label { display: block; margin-bottom: 5px; }
+    input[type="email"], input[type="password"], input[type="text"], input[type="number"] { width: calc(100% - 22px); padding: 10px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+    button { width: 100%; padding: 10px; background-color: #34C759; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    button:hover { background-color: #28a745; }
+    p { text-align: center; margin-top: 15px; }
+    a { color: #007bff; text-decoration: none; }
+    a:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
   <div class="container">
-    <h2>PNTIT</h2>
+    <h2>Register</h2>
     <form id="signupForm">
       <label for="name"><b>Name</b>:</label>
       <input type="text" id="name" placeholder="Enter Your Name" required>
@@ -92,65 +40,54 @@
   <script type="module">
     import { createClient } from 'https://cdn.skypack.dev/@supabase/supabase-js';
     const supabaseUrl = 'https://vefcftvmjuksycmyrvmi.supabase.co';
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZlZmNmdHZtanVrc3ljbXlydm1pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIxMTI4OTgsImV4cCI6MjA1NzY4ODg5OH0.VXcB8J56mK51kIGqBzYPZUh8d1wQ5rR4DlyA22r-vsA;
+    const supabaseKey = 'YOUR_SUPABASE_KEY_HERE'; // Keep this secure!
     const supabase = createClient(supabaseUrl, supabaseKey);
-    
-form.addEventListener('submit', async function(event) {
-  event.preventDefault();
-  const name = document.getElementById('name').value;
-  const surname = document.getElementById('surname').value;
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
-  const cellNumber = document.getElementById('cell_number').value;
 
-  alert('Submitting form...');
+    const form = document.getElementById('signupForm');
+    form.addEventListener("submit", async function (event) {
+      event.preventDefault();
+      const name = document.getElementById("name").value;
+      const surname = document.getElementById("surname").value;
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const cellNumber = document.getElementById("cell_number").value;
 
-  try {
-    const { user, error: signUpError } = await supabase.auth.signUp({
-      email,
-      password,
-    });
+      alert('Signing up user...');
 
-    alert('Sign up response: ' + JSON.stringify(user) + ', Error: ' + signUpError);
+      const { user, error: signUpError } = await supabase.auth.signUp({
+        email,
+        password,
+      });
 
-    if (signUpError) {
-      alert('Sign up error: ' + signUpError.message);
-      return;
-    }
+      if (signUpError) {
+        alert('Sign up error: ' + signUpError.message);
+        return;
+      }
 
-    const uid = supabase.auth.user().id;
-    alert('UID: ' + uid);
+      alert('User signed up successfully!');
 
-    try {
-      const { data, error: insertError } = await supabase
+      const userId = user.id; // Get the user ID
+      alert('User ID: ' + userId);
+
+      const { data, error } = await supabase
         .from('mytable')
-        .insert([
-          {
-            name,
-            surname,
-            email,
-            cell_number: cellNumber,
-            user id: uid,
-          },
-        ]);
+        .insert([{
+          "user id": userId, // Insert the user ID into the "user id" column
+          name,
+          surname,
+          email,
+          cell_number: cellNumber,
+        }]);
 
-      alert('Insert response: ' + JSON.stringify(data) + ', Error: ' + insertError);
-
-      if (insertError) {
-        alert('Insert error: ' + insertError.message);
+      if (error) {
+        alert('Insert error: ' + error.message);
       } else {
-        alert('Data inserted: ' + JSON.stringify(data));
-        alert('Account created successfully!');
+        alert('Data inserted successfully!');
+        alert("Account created successfully!");
         window.location.href = 'welcome_page.html';
       }
-    } catch (insertError) {
-      alert('Insert error: ' + insertError.message);
-    }
-  } catch (error) {
-    alert('An unexpected error occurred: ' + error.message);
-  }
-});
+    });
+  </script>
 
- </script>
-</body>
-</html>
+
+    
