@@ -43,7 +43,6 @@
     const supabaseUrl = 'https://vefcftvmjuksycmyrvmi.supabase.co';
     const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZlZmNmdHZtanVrc3ljbXlydm1pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIxMTI4OTgsImV4cCI6MjA1NzY4ODg5OH0.VXcB8J56mK51kIGqBzYPZUh8d1wQ5rR4DlyA22r-vsA'; 
     const supabase = createClient(supabaseUrl, supabaseKey);
-
     
 form.addEventListener("submit", async function (event) {
   event.preventDefault();
@@ -55,45 +54,37 @@ form.addEventListener("submit", async function (event) {
 
   alert('Signing up user...');
 
-  try {
-    const { user, error: signUpError } = await supabase.auth.signUp({
+  const { user, error: signUpError } = await supabase.auth.signUp({
+    email,
+    password,
+  });
+
+  if (signUpError) {
+    alert('Sign up error: ' + signUpError.message);
+    return;
+  }
+
+  alert('User signed up successfully!');
+
+  const userId = user.id; // Get the user ID
+  alert('User ID: ' + userId);
+
+  const { data, error } = await supabase
+    .from('mytable')
+    .insert([{
+      "user id": userId, // Insert the user ID into the "user id" column
+      name,
+      surname,
       email,
-      password,
-    });
+      cell_number: cellNumber,
+    }]);
 
-    if (signUpError) {
-      alert('Sign up error: ' + signUpError.message);
-      return;
-    }
-
-    alert('User signed up successfully!');
-
-    const userId = user.id; // Get the user ID
-    alert('User ID: ' + userId);
-
-    try {
-      const { data, error } = await supabase
-        .from('mytable')
-        .insert([{
-          "user id": userId, // Insert the user ID into the "user id" column
-          name,
-          surname,
-          email,
-          cell_number: cellNumber,
-        }]);
-
-      if (error) {
-        alert('Insert error: ' + error.message);
-      } else {
-        alert('Data inserted successfully!');
-        alert("Account created successfully!");
-        window.location.href = 'welcome_page.html';
-      }
-    } catch (error) {
-      alert('Insert error: ' + error.message);
-    }
-  } catch (error) {
-    alert('An unexpected error occurred: ' + error.message);
+  if (error) {
+    alert('Insert error: ' + error.message);
+  } else {
+    alert('Data inserted successfully!');
+    alert("Account created successfully!");
+    window.location.href = 'welcome_page.html';
   }
 });
   </script>
