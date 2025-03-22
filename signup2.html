@@ -69,24 +69,24 @@
       const userId = user.id; // Get the user ID
       alert('User ID: ' + userId);
 
-      const { data, error } = await supabase
-        .from('mytable')
-        .insert([{
-          "user id": userId, // Insert the user ID into the "user id" column
-          name,
-          surname,
-          email,
-          cell_number: cellNumber,
-        }]);
+          const { data, error } = await supabase
+      .from('mytable')
+      .insert([{
+        "user id": userId,
+        name,
+        surname,
+        email,
+        cell_number: cellNumber,
+      }]);
 
-      if (error) {
-        alert('Insert error: ' + error.message);
-      } else {
-        alert('Data inserted successfully!');
-        alert("Account created successfully!");
-        window.location.href = 'welcome_page.html';
-      }
-    });
+    if (error) {
+      alert('Insert error: ' + JSON.stringify(error)); // Inspect the error object
+    } else {
+      alert('Data inserted successfully!');
+      alert("Account created successfully!");
+      window.location.href = 'welcome_page.html';
+    }
+      });
   </script>
 
 
